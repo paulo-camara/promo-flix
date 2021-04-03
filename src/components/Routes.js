@@ -6,10 +6,10 @@ import {
   Switch,
 } from "react-router-dom";
 
-import { Layout } from "../Layout/Layout";
+import { Layout } from ".//Layout/Layout";
 
-import { List } from "../List/List";
-import { About } from "../About/About";
+import { List } from "./List/List";
+import { About } from "./About/About";
 
 export default ({ home }) => {
   return (
