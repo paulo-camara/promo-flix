@@ -20,5 +20,5 @@ export const ButtonFilter = styled.button`
 `;
 
 export const Filter = styled.div`
-  margin: 30px 30px 20px 20px;
+  margin: 30px 20px 20px 20px;
 `;
