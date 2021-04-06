@@ -41,7 +41,7 @@ export class List extends Reflux.Component {
   _onFilter() {}
 
   _handlerEnterFilter({ which }) {
-    if (which === 13) this._getListPopular();
+    if (which === 13) ListActions.GetListGenre();
   }
 
   _onChangeFilter(e) {
