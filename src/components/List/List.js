@@ -31,10 +31,8 @@ export class List extends React.Component {
     this._onChangeFilter = this._onChangeFilter.bind(this);
     this._onFilter = this._onFilter.bind(this);
     this._handlerEnterFilter = this._handlerEnterFilter.bind(this);
-
     this._getListGenreSuccess = this._getListGenreSuccess.bind(this);
     this._getListPopularSuccess = this._getListPopularSuccess.bind(this);
-
     this._setPageNumber = this._setPageNumber.bind(this);
 
     this.state = {
@@ -50,25 +48,6 @@ export class List extends React.Component {
 
   componentDidMount() {
     this._getListGenre();
-  }
-
-  _changeGenre(genre) {
-    const hasMoreOne = [];
-    this.state.genres.forEach((genre) => {
-      if (genre.isSelected) hasMoreOne.push("yes");
-    });
-
-    if (hasMoreOne.length <= 1 && genre.isSelected) return;
-
-    const genres = this.state.genres;
-    const indexObject = genres.findIndex((x) => x.id === genre.id);
-    genres.splice(indexObject, 1);
-
-    this.setState(
-      update(this.state, {
-        genres: { $push: [{ ...genre, isSelected: !genre.isSelected }] },
-      })
-    );
   }
 
   //#region Request
@@ -161,6 +140,25 @@ export class List extends React.Component {
       })
     );
   }
+
+  _changeGenre(genre) {
+    const hasMoreOne = [];
+    this.state.genres.forEach((genre) => {
+      if (genre.isSelected) hasMoreOne.push("yes");
+    });
+
+    if (hasMoreOne.length <= 1 && genre.isSelected) return;
+
+    const genres = this.state.genres;
+    const indexObject = genres.findIndex((x) => x.id === genre.id);
+    genres.splice(indexObject, 1);
+
+    this.setState(
+      update(this.state, {
+        genres: { $push: [{ ...genre, isSelected: !genre.isSelected }] },
+      })
+    );
+  }
   //#endregion
 
   //#region get components
@@ -181,46 +179,44 @@ export class List extends React.Component {
   }
 
   _getListMoviesComponent() {
-    const a = [];
+    const allCheckboxMarked = [];
     this.state.genres.forEach((genre) => {
-      if (genre.isSelected) {
-        a.push(genre.id);
+      if (genre.isSelected === true) {
+        allCheckboxMarked.push(genre.id);
       }
     });
 
+    let showMovie = false;
     return this.state.popularMovies.results.map((popular) => {
-      let vaiMostrar = false;
       popular.genre_ids.forEach((id) => {
-        if (a.includes(id)) {
-          vaiMostrar = true;
+        if (allCheckboxMarked.includes(id)) {
+          showMovie = true;
         }
       });
 
       return (
-        true && (
-          <div key={popular.title}>
-            <BoxMovie>
-              <ImageMovie
-                src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
-              />
-            </BoxMovie>
-            <FooterBoxMovie
-              style={{
-                display: "flex",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <Vote vote={popular.vote_average}>{popular.vote_average}</Vote>
-              <Link className="menu-link" to={"/"}>
-                <LabelDefault>detalhes</LabelDefault>
-              </Link>
-            </FooterBoxMovie>
-          </div>
-        )
+        showMovie && <div key={popular.title}>
+            <LabelDefault style={{color: 'white'}}>{popular.title}</LabelDefault>
+          <BoxMovie>
+            <ImageMovie
+              src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
+            />
+          </BoxMovie>
+          <FooterBoxMovie
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Vote vote={popular.vote_average}>{popular.vote_average}</Vote>
+            <Link className="menu-link" to={"/"}>
+              <LabelDefault>detalhes</LabelDefault>
+            </Link>
+          </FooterBoxMovie>
+        </div>
       );
     });
   }
-
   //#endregion
 
   render() {

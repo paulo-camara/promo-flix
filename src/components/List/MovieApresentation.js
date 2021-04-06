@@ -11,7 +11,7 @@ export const BoxMovie = styled.div`
   width: 250px;
   height: 190px;
   border: 1px solid #564a4a;
-  margin: 20px;
+  margin: 0px 20px 20px 20px;
   cursor: pointer;
 
   &:hover {
