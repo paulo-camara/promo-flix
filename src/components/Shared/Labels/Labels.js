@@ -6,3 +6,9 @@ export const LabelDefault = styled.span`
   text-decoration: none;
   margin: 10px;
 `;
+
+export const LabelTitle = styled.span`
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+`;

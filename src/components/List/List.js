@@ -1,165 +1,60 @@
 import React from "react";
-import update from "immutability-helper";
-import { Logo } from "../Shared/Logo/Logo";
-import { Header } from "../Shared/Layout/Layout";
-import { LabelDefault } from "../Shared/Labels/Labels";
-import { Filter, InputFilter, ButtonFilter } from "../Shared/Filter/Filter";
+import Reflux from "reflux";
+import { ListActions } from "./ListActions";
+import { ListStore } from "./ListStore";
+import { orderBy } from "lodash";
+import { Link } from "react-router-dom";
+import { lOGO_PROMO_FLIX } from "../Shared/Logo/LogoBase64";
 import {
+  Logo,
+  Header,
+  LabelDefault,
+  LabelTitle,
+  Loader,
+  Filter,
+  InputFilter,
+  ButtonFilter,
   ContainerBox,
   BoxMovie,
   Vote,
   ImageMovie,
   FooterBoxMovie,
-} from "./MovieApresentation";
-import {
   ContainerFilterGenres,
   LabelFilterGenres,
   FilterGenres,
-} from "./FilterGenres";
-import { Loader } from "../Shared/Loader/Loader";
-import { SendRequestGet } from "../../Requests";
-import { HOST_API } from "../../constants";
-import { lOGO_PROMO_FLIX } from "../Shared/Logo/LogoBase64";
-import { orderBy } from "lodash";
+  ContainerBodyList,
+} from "./index";
 
-import { Link } from "react-router-dom";
-
-export class List extends React.Component {
+export class List extends Reflux.Component {
   constructor(props) {
     super(props);
 
-    this._onChangeFilter = this._onChangeFilter.bind(this);
-    this._onFilter = this._onFilter.bind(this);
-    this._handlerEnterFilter = this._handlerEnterFilter.bind(this);
-    this._getListGenreSuccess = this._getListGenreSuccess.bind(this);
-    this._getListPopularSuccess = this._getListPopularSuccess.bind(this);
-    this._setPageNumber = this._setPageNumber.bind(this);
+    this.store = ListStore;
 
-    this.state = {
-      controls: {
-        isLoading: false,
-        pageNumber: 1,
-      },
-      filterValue: "",
-      genres: [],
-      popularMovies: { results: [] },
-    };
+    this._handlerEnterFilter = this._handlerEnterFilter.bind(this);
   }
 
   componentDidMount() {
-    this._getListGenre();
+    ListActions.GetListGenre();
   }
 
-  //#region Request
-  _getListGenre() {
-    this._onSetIsLoading(true);
-
-    SendRequestGet(
-      `${HOST_API}/genre/movie/list`,
-      {},
-      this._getListGenreSuccess,
-      () => {}
-    );
-  }
-
-  _getListGenreSuccess(data) {
-    this._onSetIsLoading(false);
-
-    this.setState(
-      update(this.state, {
-        genres: {
-          $set: data.genres.map((genres) => {
-            return { ...genres, isSelected: true };
-          }),
-        },
-      })
-    );
-
-    this._getListPopular();
-  }
-
-  _getListPopular() {
-    this._onSetIsLoading(true);
-
-    SendRequestGet(
-      `${HOST_API}/movie/popular`,
-      { page: this.state.controls.pageNumber },
-      this._getListPopularSuccess,
-      () => {}
-    );
-  }
-
-  _getListPopularSuccess(data) {
-    this.setState(
-      update(this.state, {
-        popularMovies: {
-          $set: { ...data },
-        },
-      })
-    );
-
-    this._onSetIsLoading(false);
-  }
-
-  _getListPopularFail() {
-    this._onSetIsLoading(false);
-  }
-  //#endregion
-
-  //#region Filter
   _onFilter() {}
 
   _handlerEnterFilter({ which }) {
     if (which === 13) this._getListPopular();
   }
-  //#endregion
 
-  //#region handler controls
   _onChangeFilter(e) {
-    this.setState({
-      filterValue: e.target.value,
-    });
-  }
-
-  _onSetIsLoading(status) {
-    this.setState(
-      update(this.state, {
-        controls: {
-          isLoading: { $set: status },
-        },
-      })
-    );
+    ListActions.ChangeFilter(e);
   }
 
   _setPageNumber(e) {
-    this.setState(
-      update(this.state, {
-        controls: {
-          pageNumber: { $set: e.target.value },
-        },
-      })
-    );
+    ListActions.SetPageNumber(e);
   }
 
   _changeGenre(genre) {
-    const hasMoreOne = [];
-    this.state.genres.forEach((genre) => {
-      if (genre.isSelected) hasMoreOne.push("yes");
-    });
-
-    if (hasMoreOne.length <= 1 && genre.isSelected) return;
-
-    const genres = this.state.genres;
-    const indexObject = genres.findIndex((x) => x.id === genre.id);
-    genres.splice(indexObject, 1);
-
-    this.setState(
-      update(this.state, {
-        genres: { $push: [{ ...genre, isSelected: !genre.isSelected }] },
-      })
-    );
+    ListActions.ChangeGenreFilter(genre);
   }
-  //#endregion
 
   //#region get components
   _getFilterGenresComponent() {
@@ -189,31 +84,30 @@ export class List extends React.Component {
     let showMovie = false;
     return this.state.popularMovies.results.map((popular) => {
       popular.genre_ids.forEach((id) => {
-        if (allCheckboxMarked.includes(id)) {
+        if (allCheckboxMarked.includes(id) || allCheckboxMarked.length == 0) {
           showMovie = true;
         }
       });
 
       return (
-        showMovie && <div key={popular.title}>
-            <LabelDefault style={{color: 'white'}}>{popular.title}</LabelDefault>
-          <BoxMovie>
-            <ImageMovie
-              src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
-            />
-          </BoxMovie>
-          <FooterBoxMovie
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <Vote vote={popular.vote_average}>{popular.vote_average}</Vote>
-            <Link className="menu-link" to={"/"}>
-              <LabelDefault>detalhes</LabelDefault>
-            </Link>
-          </FooterBoxMovie>
-        </div>
+        showMovie && (
+          <div key={popular.title}>
+            <LabelDefault style={{ color: "white" }}>
+              {popular.title}
+            </LabelDefault>
+            <BoxMovie>
+              <ImageMovie
+                src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
+              />
+            </BoxMovie>
+            <FooterBoxMovie>
+              <Vote vote={popular.vote_average}>{popular.vote_average}</Vote>
+              <Link className="menu-link" to={"/about"}>
+                <LabelDefault>detalhes</LabelDefault>
+              </Link>
+            </FooterBoxMovie>
+          </div>
+        )
       );
     });
   }
@@ -238,18 +132,8 @@ export class List extends React.Component {
             <ButtonFilter onClick={this._onFilter}>Filtrar</ButtonFilter>
           </Filter>
         </Header>
-        <LabelDefault
-          style={{ fontSize: "30px", color: "white", fontWeight: "bold" }}
-        >
-          FILMES MAIS POPULARES
-        </LabelDefault>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            margin: "20px",
-          }}
-        >
+        <LabelTitle>FILMES MAIS POPULARES</LabelTitle>
+        <ContainerBodyList>
           <ContainerBox>
             {this._getListMoviesComponent()}
             <div>
@@ -266,7 +150,7 @@ export class List extends React.Component {
             </div>
           </ContainerBox>
           <FilterGenres>{this._getFilterGenresComponent()}</FilterGenres>
-        </div>
+        </ContainerBodyList>
       </div>
     );
   }

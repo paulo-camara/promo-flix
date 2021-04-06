@@ -44,3 +44,9 @@ export const FooterBoxMovie = styled.div`
   display: flex;
   justify-content: space-evenly;
 `;
+
+export const ContainerBodyList = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+`;
