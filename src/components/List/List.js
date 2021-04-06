@@ -2,8 +2,15 @@ import React from "react";
 import update from "immutability-helper";
 import { Logo } from "../Shared/Logo/Logo";
 import { Header } from "../Shared/Layout/Layout";
+import { LabelDefault } from "../Shared/Labels/Labels";
 import { Filter, InputFilter, ButtonFilter } from "../Shared/Filter/Filter";
-import { ContainerBox, BoxMovie, Vote, ImageMovie } from "./MovieApresentation";
+import {
+  ContainerBox,
+  BoxMovie,
+  Vote,
+  ImageMovie,
+  FooterBoxMovie,
+} from "./MovieApresentation";
 import {
   ContainerFilterGenres,
   LabelFilterGenres,
@@ -21,15 +28,12 @@ export class List extends React.Component {
   constructor(props) {
     super(props);
 
-    // this._onChangeFilter = this._onChangeFilter.bind(this);
-    // this._onFilter = this._onFilter.bind(this);
-    // this._handlerEnterFilter = this._handlerEnterFilter.bind(this);
+    this._onChangeFilter = this._onChangeFilter.bind(this);
+    this._onFilter = this._onFilter.bind(this);
+    this._handlerEnterFilter = this._handlerEnterFilter.bind(this);
 
     this._getListGenreSuccess = this._getListGenreSuccess.bind(this);
-    this._getListGenreFail = this._getListGenreFail.bind(this);
-
     this._getListPopularSuccess = this._getListPopularSuccess.bind(this);
-    this._getListPopularFail = this._getListPopularFail.bind(this);
 
     this._setPageNumber = this._setPageNumber.bind(this);
 
@@ -75,7 +79,7 @@ export class List extends React.Component {
       `${HOST_API}/genre/movie/list`,
       {},
       this._getListGenreSuccess,
-      this._getListGenreFail
+      () => {}
     );
   }
 
@@ -95,10 +99,6 @@ export class List extends React.Component {
     this._getListPopular();
   }
 
-  _getListGenreFail() {
-    this._onSetIsLoading(false);
-  }
-
   _getListPopular() {
     this._onSetIsLoading(true);
 
@@ -106,7 +106,7 @@ export class List extends React.Component {
       `${HOST_API}/movie/popular`,
       { page: this.state.controls.pageNumber },
       this._getListPopularSuccess,
-      this._getListPopularFail
+      () => {}
     );
   }
 
@@ -136,11 +136,11 @@ export class List extends React.Component {
   //#endregion
 
   //#region handler controls
-  // _onChangeFilter(e) {
-  //   this.setState({
-  //     filterValue: e.target.value,
-  //   });
-  // }
+  _onChangeFilter(e) {
+    this.setState({
+      filterValue: e.target.value,
+    });
+  }
 
   _onSetIsLoading(status) {
     this.setState(
@@ -163,23 +163,76 @@ export class List extends React.Component {
   }
   //#endregion
 
-  render() {
-    const { isLoading, genresSelected, pageNumber } = this.state.controls;
-    const { popularMovies, genres } = this.state;
+  //#region get components
+  _getFilterGenresComponent() {
+    const { genres } = this.state;
+    return orderBy(genres, "name", "asc").map((genre) => {
+      return (
+        <ContainerFilterGenres key={genre.id}>
+          <LabelFilterGenres isSelected={false}>{genre.name}</LabelFilterGenres>
+          <input
+            type="checkbox"
+            checked={genre.isSelected}
+            onChange={() => this._changeGenre(genre)}
+          />
+        </ContainerFilterGenres>
+      );
+    });
+  }
 
+  _getListMoviesComponent() {
     const a = [];
-    genres.forEach((genre) => {
+    this.state.genres.forEach((genre) => {
       if (genre.isSelected) {
         a.push(genre.id);
       }
     });
+
+    return this.state.popularMovies.results.map((popular) => {
+      let vaiMostrar = false;
+      popular.genre_ids.forEach((id) => {
+        if (a.includes(id)) {
+          vaiMostrar = true;
+        }
+      });
+
+      return (
+        true && (
+          <div key={popular.title}>
+            <BoxMovie>
+              <ImageMovie
+                src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
+              />
+            </BoxMovie>
+            <FooterBoxMovie
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <Vote vote={popular.vote_average}>{popular.vote_average}</Vote>
+              <Link className="menu-link" to={"/"}>
+                <LabelDefault>detalhes</LabelDefault>
+              </Link>
+            </FooterBoxMovie>
+          </div>
+        )
+      );
+    });
+  }
+
+  //#endregion
+
+  render() {
+    const { isLoading, pageNumber } = this.state.controls;
+    const { popularMovies } = this.state;
 
     return (
       <div className="list">
         <Loader isLoading={isLoading} />
         <Header>
           <Logo src={lOGO_PROMO_FLIX} />
-          {/* <Filter>
+          <Filter>
             <InputFilter
               autoFocus
               onKeyUp={this._handlerEnterFilter}
@@ -187,8 +240,13 @@ export class List extends React.Component {
               value={this.state.filterValue}
             />
             <ButtonFilter onClick={this._onFilter}>Filtrar</ButtonFilter>
-          </Filter> */}
+          </Filter>
         </Header>
+        <LabelDefault
+          style={{ fontSize: "30px", color: "white", fontWeight: "bold" }}
+        >
+          FILMES MAIS POPULARES
+        </LabelDefault>
         <div
           style={{
             display: "flex",
@@ -197,46 +255,10 @@ export class List extends React.Component {
           }}
         >
           <ContainerBox>
-            {popularMovies.results.map((popular) => {
-              let vaiMostrar = false;
-              popular.genre_ids.forEach((id) => {
-                if (a.includes(id)) {
-                  vaiMostrar = true;
-                }
-              });
-
-              return (
-                vaiMostrar && (
-                  <div key={popular.title}>
-                    <BoxMovie>
-                      <ImageMovie
-                        src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
-                      ></ImageMovie>
-                    </BoxMovie>
-
-                    <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-                      <Vote vote={popular.vote_average}>
-                        {popular.vote_average}
-                      </Vote>
-                      <Link className="menu-link" to={"/"}>
-                        <span style={{ color: "white", fontSize: "12px" }}>
-                          detalhes
-                        </span>
-                      </Link>
-                    </div>
-                  </div>
-                )
-              );
-            })}
-            <div
-              style={{
-                marginLeft: "20px",
-                color: "white",
-                marginRight: "10px",
-              }}
-            >
-              Página
-              <input
+            {this._getListMoviesComponent()}
+            <div>
+              <LabelDefault>Página</LabelDefault>
+              <InputFilter
                 type="number"
                 value={pageNumber}
                 onKeyUp={this._handlerEnterFilter}
@@ -247,23 +269,7 @@ export class List extends React.Component {
               />
             </div>
           </ContainerBox>
-
-          <FilterGenres>
-            {orderBy(genres, "name", "asc").map((genre) => {
-              return (
-                <ContainerFilterGenres key={genre.id}>
-                  <LabelFilterGenres isSelected={false}>
-                    {genre.name}
-                  </LabelFilterGenres>
-                  <input
-                    type="checkbox"
-                    checked={genre.isSelected}
-                    onChange={() => this._changeGenre(genre)}
-                  />
-                </ContainerFilterGenres>
-              );
-            })}
-          </FilterGenres>
+          <FilterGenres>{this._getFilterGenresComponent()}</FilterGenres>
         </div>
       </div>
     );

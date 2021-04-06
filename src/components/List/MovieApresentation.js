@@ -34,8 +34,13 @@ export const ImageMovie = styled.img`
   height: 190px;
 
   &:hover {
-    transition: width 0.4s, height 0.4s; 
+    transition: width 0.4s, height 0.4s;
     width: 290px;
     height: 230px;
   }
+`;
+
+export const FooterBoxMovie = styled.div`
+  display: flex;
+  justify-content: space-evenly;
 `;
