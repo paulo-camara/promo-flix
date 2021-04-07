@@ -1,15 +1,15 @@
 import Reflux from "reflux";
 import update from "immutability-helper";
 import { ListActions } from "./ListActions";
-
 import { SendRequestGet } from "../../Requests";
 import { HOST_API } from "../../constants";
-import { RedirectError } from "../Errors/ServerErrors/ServerError";
+import { RedirectError } from "../Shared/index";
 
 export class ListStore extends Reflux.Store {
   constructor(props) {
     super(props);
 
+    /**Identifica qual é a action que a store irá escutar*/
     this.listenables = ListActions;
 
     this.state = {
@@ -17,13 +17,12 @@ export class ListStore extends Reflux.Store {
         isLoading: false,
         pageNumber: 1,
       },
-      filterValue: "",
       genres: [],
       popularMovies: { results: [] },
     };
   }
 
-  //#region Request
+  //#region requests
   onGetListGenre(history) {
     this._onSetIsLoading(true);
 
@@ -35,6 +34,10 @@ export class ListStore extends Reflux.Store {
     );
   }
   _getListGenreSuccess(data, history) {
+    /** Dentro do setState é feita uma verificação para caso o genero esteja selecionado, 
+     * para caso tenha uma chamada por um segundo unmount seja possivel identificar quais 
+     * eram os filtros selecionados  */
+
     this.setState(
       update(this.state, {
         genres: {
@@ -83,13 +86,7 @@ export class ListStore extends Reflux.Store {
   }
   //#endregion
 
-  //#region set controls
-  onChangeFilter(e) {
-    this.setState({
-      filterValue: e.target.value,
-    });
-  }
-
+  //#region set controls state
   _onSetIsLoading(status) {
     this.setState(
       update(this.state, {
@@ -100,17 +97,19 @@ export class ListStore extends Reflux.Store {
     );
   }
 
-  onSetPageNumber(e) {
+  onSetPageNumber(value) {
     this.setState(
       update(this.state, {
         controls: {
-          pageNumber: { $set: e.target.value },
+          pageNumber: { $set: value },
         },
       })
     );
   }
 
   onChangeGenreFilter(genre) {
+    /*indexObject é o indeitificador da posição do array 
+    em que deve ser alterado o atributo isSelected*/
     const indexObject = this.state.genres.findIndex((x) => x.id === genre.id);
 
     this.setState(

@@ -6,10 +6,9 @@ import {
   Switch,
 } from "react-router-dom";
 
-import { Layout } from "./Shared/Layout/Layout";
+import { Layout, Error } from "./Shared/index";
 import { List } from "./List/List";
 import { About } from "./About/About";
-import { Error } from "./Errors/ServerErrors/ServerError";
 
 export default ({ home }) => {
   return (

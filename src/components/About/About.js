@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SendRequestGet } from "../../Requests";
 import { HOST_API } from "../../constants";
-import { RedirectError } from "../Errors/ServerErrors/ServerError";
 import { ContainerAboutMovie, Image, DataMovie, Synopsis } from "./index";
 import {
   Logo,
@@ -10,7 +9,11 @@ import {
   LabelTitle,
   Vote,
   lOGO_PROMO_FLIX,
+  RedirectError,
 } from "../Shared/index";
+
+/** Por este componente ser mais simples foi mais interessante
+ * desenvolver usando react hook */
 
 export const About = ({ history, match }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +22,8 @@ export const About = ({ history, match }) => {
   useEffect(() => {
     _getMovie();
 
+    /** reseta o state ao desmontar o componente para que não 
+    mantenha dados anteriores na proxima listagem */
     return _resetState;
   }, []);
 

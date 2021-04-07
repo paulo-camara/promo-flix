@@ -20,11 +20,11 @@ export const Synopsis = styled.div`
 `;
 
 export const DataMovie = styled.div`
-  width: 37%;
+  width: 36%;
   margin-left: 40px;
   text-align: left;
 
-  @media (max-width: 1455px) {
+  @media (max-width: 1023px) {
     width: 90%;
     text-align: center;
   }

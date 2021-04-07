@@ -1,9 +1,10 @@
 import { Logo } from "./Logo/Logo";
 import { Loader } from "./Loader/Loader";
-import { Header } from "./Layout/Layout";
+import { Header, Layout } from "./Layout/Layout";
 import { lOGO_PROMO_FLIX } from "./Logo/LogoBase64";
 import { LabelDefault, LabelTitle, Vote } from "../Shared/Labels/Labels";
-import { Filter, InputFilter, ButtonFilter } from "../Shared/Filter/Filter";
+import { Filter, InputFilter, ButtonFilter } from "./Filter/Filter";
+import { RedirectError, Error } from "./Errors/Errors/GenericError";
 
 export {
   Logo,
@@ -16,4 +17,7 @@ export {
   InputFilter,
   ButtonFilter,
   lOGO_PROMO_FLIX,
+  Error,
+  RedirectError,
+  Layout,
 };

@@ -1,11 +1,9 @@
-import Routes from './components/Routes';
+import Routes from "./components/Routes";
 
-function App() {  
+function App() {
   return (
     <div className="App">
-      <body>
-        <Routes home={'/list'}/>
-      </body>
+      <Routes home={"/list"} />
     </div>
   );
 }

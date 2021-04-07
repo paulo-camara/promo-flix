@@ -1,7 +1,6 @@
 import React from "react";
 import Reflux from "reflux";
 import { Link } from "react-router-dom";
-import { orderBy } from "lodash";
 import { ListActions } from "./ListActions";
 import { ListStore } from "./ListStore";
 import {
@@ -12,8 +11,6 @@ import {
   LabelDefault,
   LabelTitle,
   InputFilter,
-  // ButtonFilter,
-  // Filter,
   lOGO_PROMO_FLIX,
 } from "../Shared/index";
 import {
@@ -32,10 +29,15 @@ export class List extends Reflux.Component {
   constructor(props) {
     super(props);
 
+    //Efetua a conexão com store Reflux
     this.store = ListStore;
 
     this._handlerEnterFilter = this._handlerEnterFilter.bind(this);
   }
+
+  /** Todas as funções que alteram state foram agrupadas na store por organização de código. 
+  Assim podemos ver mais precisamente as responsabilidades do componente, e cada vez que é 
+  necessario alterar algum state é chamada uma action da store */
 
   componentDidMount() {
     ListActions.GetListGenre(this.props.history);
@@ -45,14 +47,8 @@ export class List extends Reflux.Component {
     if (which === 13) ListActions.GetListGenre();
   }
 
-  // _onFilter() {}
-  
-  // _onChangeFilter(e) {
-  //   ListActions.ChangeFilter(e);
-  // }
-
   _setPageNumber(e) {
-    ListActions.SetPageNumber(e);
+    ListActions.SetPageNumber(e.target.value);
   }
 
   _changeGenre(genre) {
@@ -93,7 +89,7 @@ export class List extends Reflux.Component {
 
       return (
         showMovie && (
-          <div key={popular.title}>
+          <div key={popular.id}>
             <LabelDefault style={{ color: "white" }}>
               {popular.title}
             </LabelDefault>
@@ -120,22 +116,13 @@ export class List extends Reflux.Component {
 
   render() {
     const { isLoading, pageNumber } = this.state.controls;
-    const { popularMovies, filterValue } = this.state;
+    const { popularMovies } = this.state;
 
     return (
       <div className="list">
         <Loader isLoading={isLoading} />
         <Header>
           <Logo src={lOGO_PROMO_FLIX} />
-          {/* <Filter>
-            <InputFilter
-              autoFocus
-              onKeyUp={this._handlerEnterFilter}
-              onChange={this._onChangeFilter}
-              value={filterValue}
-            />
-            <ButtonFilter onClick={this._onFilter}>Filtrar</ButtonFilter>
-          </Filter> */}
         </Header>
         <LabelTitle>FILMES MAIS POPULARES</LabelTitle>
         {!isLoading && popularMovies.results.length && (
