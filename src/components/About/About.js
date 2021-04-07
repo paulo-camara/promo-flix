@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SendRequestGet } from "../../Requests";
 import { HOST_API } from "../../constants";
+import { RedirectError } from "../Errors/ServerErrors/ServerError";
 import { ContainerAboutMovie, Image, DataMovie, Synopsis } from "./index";
 import {
   Logo,
@@ -11,7 +12,7 @@ import {
   lOGO_PROMO_FLIX,
 } from "../Shared/index";
 
-export const About = ({ match }) => {
+export const About = ({ history, match }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [movie, setMovie] = useState({});
 
@@ -39,6 +40,7 @@ export const About = ({ match }) => {
   };
 
   const _getMovieFail = () => {
+    RedirectError(history);
     setIsLoading(false);
   };
 

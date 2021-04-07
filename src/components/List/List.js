@@ -37,7 +37,7 @@ export class List extends Reflux.Component {
   }
 
   componentDidMount() {
-    ListActions.GetListGenre();
+    ListActions.GetListGenre(this.props.history);
   }
 
   _onFilter() {}
