@@ -12,12 +12,13 @@ import {
   LabelDefault,
   LabelTitle,
   InputFilter,
-  ButtonFilter,
-  Filter,
+  // ButtonFilter,
+  // Filter,
   lOGO_PROMO_FLIX,
 } from "../Shared/index";
 import {
   ContainerBox,
+  PagenationRow,
   BoxMovie,
   ImageMovie,
   FooterBoxMovie,
@@ -40,15 +41,15 @@ export class List extends Reflux.Component {
     ListActions.GetListGenre(this.props.history);
   }
 
-  _onFilter() {}
-
   _handlerEnterFilter({ which }) {
     if (which === 13) ListActions.GetListGenre();
   }
 
-  _onChangeFilter(e) {
-    ListActions.ChangeFilter(e);
-  }
+  // _onFilter() {}
+  
+  // _onChangeFilter(e) {
+  //   ListActions.ChangeFilter(e);
+  // }
 
   _setPageNumber(e) {
     ListActions.SetPageNumber(e);
@@ -60,8 +61,7 @@ export class List extends Reflux.Component {
 
   //#region get components
   _getFilterGenresComponent() {
-    const { genres } = this.state;
-    return orderBy(genres, "name", "asc").map((genre) => {
+    return this.state.genres.map((genre) => {
       return (
         <ContainerFilterGenres key={genre.id}>
           <LabelFilterGenres isSelected={false}>{genre.name}</LabelFilterGenres>
@@ -100,7 +100,7 @@ export class List extends Reflux.Component {
             <Link
               onClick={() => this.props.history.push(popular.id)}
               className="menu-link"
-              to={`/about/${popular.id}`}
+              to={`list/about/${popular.id}`}
             >
               <BoxMovie>
                 <ImageMovie
@@ -127,7 +127,7 @@ export class List extends Reflux.Component {
         <Loader isLoading={isLoading} />
         <Header>
           <Logo src={lOGO_PROMO_FLIX} />
-          <Filter>
+          {/* <Filter>
             <InputFilter
               autoFocus
               onKeyUp={this._handlerEnterFilter}
@@ -135,27 +135,29 @@ export class List extends Reflux.Component {
               value={filterValue}
             />
             <ButtonFilter onClick={this._onFilter}>Filtrar</ButtonFilter>
-          </Filter>
+          </Filter> */}
         </Header>
         <LabelTitle>FILMES MAIS POPULARES</LabelTitle>
-        <ContainerBodyList>
-          <ContainerBox>
-            {this._getListMoviesComponent()}
-            <div>
-              <LabelDefault>Página</LabelDefault>
-              <InputFilter
-                type="number"
-                value={pageNumber}
-                onKeyUp={this._handlerEnterFilter}
-                onChange={this._setPageNumber}
-                min={1}
-                max={popularMovies.total_results}
-                style={{ width: "50px" }}
-              />
-            </div>
-          </ContainerBox>
-          <FilterGenres>{this._getFilterGenresComponent()}</FilterGenres>
-        </ContainerBodyList>
+        {!isLoading && popularMovies.results.length && (
+          <ContainerBodyList>
+            <ContainerBox>
+              {this._getListMoviesComponent()}
+              <PagenationRow>
+                <LabelDefault>Página</LabelDefault>
+                <InputFilter
+                  type="number"
+                  value={pageNumber}
+                  onKeyUp={this._handlerEnterFilter}
+                  onChange={this._setPageNumber}
+                  min={1}
+                  max={popularMovies.total_results}
+                  style={{ width: "50px" }}
+                />
+              </PagenationRow>
+            </ContainerBox>
+            <FilterGenres>{this._getFilterGenresComponent()}</FilterGenres>
+          </ContainerBodyList>
+        )}
       </div>
     );
   }

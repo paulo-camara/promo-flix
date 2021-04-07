@@ -19,7 +19,7 @@ export const About = ({ history, match }) => {
   useEffect(() => {
     _getMovie();
 
-    return _resetState();
+    return _resetState;
   }, []);
 
   const _getMovie = () => {
@@ -55,26 +55,28 @@ export const About = ({ history, match }) => {
       <Header>
         <Logo src={lOGO_PROMO_FLIX} />
       </Header>
-      <ContainerAboutMovie>
-        <Image
-          src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-        />
-        <DataMovie>
-          <LabelTitle>{movie.title}</LabelTitle>
-          <Synopsis>{movie.overview}</Synopsis>
-          <div style={{ color: "white" }}>
-            {"Nota: "}
-            <Vote
-              vote={movie.vote_average}
-              style={{
-                fontSize: "20px",
-              }}
-            >
-              {movie.vote_average}
-            </Vote>
-          </div>
-        </DataMovie>
-      </ContainerAboutMovie>
+      {!isLoading && (
+        <ContainerAboutMovie>
+          <Image
+            src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+          />
+          <DataMovie>
+            <LabelTitle>{movie.title}</LabelTitle>
+            <Synopsis>{movie.overview}</Synopsis>
+            <div style={{ color: "white" }}>
+              {"Nota: "}
+              <Vote
+                vote={movie.vote_average}
+                style={{
+                  fontSize: "20px",
+                }}
+              >
+                {movie.vote_average}
+              </Vote>
+            </div>
+          </DataMovie>
+        </ContainerAboutMovie>
+      )}
     </div>
   );
 };

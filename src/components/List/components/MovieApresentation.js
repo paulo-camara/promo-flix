@@ -43,3 +43,9 @@ export const ContainerBodyList = styled.div`
   justify-content: space-between;
   margin: 20px;
 `;
+
+export const PagenationRow = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;

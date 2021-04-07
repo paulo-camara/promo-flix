@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Image = styled.img`
   width: 60%;
   color: white;
-  border: 1px solid white;
+  border: 1px solid #564a4a;
   margin-bottom: 50px;
 `;
 
@@ -23,4 +23,9 @@ export const DataMovie = styled.div`
   width: 37%;
   margin-left: 40px;
   text-align: left;
+
+  @media (max-width: 1455px) {
+    width: 90%;
+    text-align: center;
+  }
 `;

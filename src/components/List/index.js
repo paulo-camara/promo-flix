@@ -4,6 +4,7 @@ import {
   ImageMovie,
   FooterBoxMovie,
   ContainerBodyList,
+  PagenationRow,
 } from "./components/MovieApresentation";
 import {
   ContainerFilterGenres,
@@ -20,4 +21,5 @@ export {
   LabelFilterGenres,
   FilterGenres,
   ContainerBodyList,
+  PagenationRow,
 };

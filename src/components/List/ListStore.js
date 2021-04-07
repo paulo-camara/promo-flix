@@ -38,8 +38,13 @@ export class ListStore extends Reflux.Store {
     this.setState(
       update(this.state, {
         genres: {
-          $set: data.genres.map((genres) => {
-            return { ...genres };
+          $set: data.genres.map((genres, index) => {
+            return {
+              ...genres,
+              isSelected: this.state.genres[index]
+                ? this.state.genres[index].isSelected
+                : false,
+            };
           }),
         },
       })
@@ -106,14 +111,15 @@ export class ListStore extends Reflux.Store {
   }
 
   onChangeGenreFilter(genre) {
-    const genres = this.state.genres;
-    const indexObject = genres.findIndex((x) => x.id === genre.id);
-
-    genres.splice(indexObject, 1);
+    const indexObject = this.state.genres.findIndex((x) => x.id === genre.id);
 
     this.setState(
       update(this.state, {
-        genres: { $push: [{ ...genre, isSelected: !genre.isSelected }] },
+        genres: {
+          $splice: [
+            [indexObject, 1, { ...genre, isSelected: !genre.isSelected }],
+          ],
+        },
       })
     );
   }

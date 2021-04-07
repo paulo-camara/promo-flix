@@ -17,11 +17,10 @@ export default ({ home }) => {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Redirect from="/" to={home}></Redirect>
+            <Redirect from="/" to={home}/>
           </Route>
-
           <Route exact path="/list" component={List} />
-          <Route exact path="/about/:id" component={About} />
+          <Route exact path="/list/about/:id" component={About} />
           <Route exact path="/error" component={Error} />
           <Route component={Error} />
         </Switch>
