@@ -1,22 +1,24 @@
 import React from "react";
 import Reflux from "reflux";
+import { Link } from "react-router-dom";
+import { orderBy } from "lodash";
 import { ListActions } from "./ListActions";
 import { ListStore } from "./ListStore";
-import { orderBy } from "lodash";
-import { Link } from "react-router-dom";
-import { lOGO_PROMO_FLIX } from "../Shared/Logo/LogoBase64";
 import {
   Logo,
+  Vote,
+  Loader,
   Header,
   LabelDefault,
   LabelTitle,
-  Loader,
-  Filter,
   InputFilter,
   ButtonFilter,
+  Filter,
+  lOGO_PROMO_FLIX,
+} from "../Shared/index";
+import {
   ContainerBox,
   BoxMovie,
-  Vote,
   ImageMovie,
   FooterBoxMovie,
   ContainerFilterGenres,
@@ -95,16 +97,19 @@ export class List extends Reflux.Component {
             <LabelDefault style={{ color: "white" }}>
               {popular.title}
             </LabelDefault>
-            <BoxMovie>
-              <ImageMovie
-                src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
-              />
-            </BoxMovie>
+            <Link
+              onClick={() => this.props.history.push(popular.id)}
+              className="menu-link"
+              to={`/about/${popular.id}`}
+            >
+              <BoxMovie>
+                <ImageMovie
+                  src={`https://image.tmdb.org/t/p/original${popular.backdrop_path}`}
+                />
+              </BoxMovie>
+            </Link>
             <FooterBoxMovie>
               <Vote vote={popular.vote_average}>{popular.vote_average}</Vote>
-              <Link className="menu-link" to={"/about"}>
-                <LabelDefault>detalhes</LabelDefault>
-              </Link>
             </FooterBoxMovie>
           </div>
         )
@@ -115,7 +120,7 @@ export class List extends Reflux.Component {
 
   render() {
     const { isLoading, pageNumber } = this.state.controls;
-    const { popularMovies } = this.state;
+    const { popularMovies, filterValue } = this.state;
 
     return (
       <div className="list">
@@ -127,7 +132,7 @@ export class List extends Reflux.Component {
               autoFocus
               onKeyUp={this._handlerEnterFilter}
               onChange={this._onChangeFilter}
-              value={this.state.filterValue}
+              value={filterValue}
             />
             <ButtonFilter onClick={this._onFilter}>Filtrar</ButtonFilter>
           </Filter>

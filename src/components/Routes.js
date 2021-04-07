@@ -21,7 +21,7 @@ export default ({ home }) => {
           </Route>
 
           <Route exact path="/list" component={List} />
-          <Route exact path="/about" component={About} />
+          <Route exact path="/about/:id" component={About} />
         </Switch>
       </Router>
     </Layout>
