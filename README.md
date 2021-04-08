@@ -24,7 +24,12 @@ Feito isso o projeto está pronto para ser rodado localmente com o seguinte coma
 $ npm start
 ```
 
-## Para acessar o site utilize o link: http://promo-flix.s3-website-us-east-1.amazonaws.com/list
+## Site hospedado em AWS S3
+
+Para hospedagem do site foi utilizado um bucket aws com configurações para hospedagem de site estaticos.
+
+Para acessar utilize a seguinte url: http://promo-flix.s3-website-us-east-1.amazonaws.com/list
+
 
 ## Construido com:
 
