@@ -10,7 +10,7 @@ $ cd promo-flix
 $ npm install
 ```
 
-Dentro da pasta `./src` deve ser criado o arquivo com nome ```API_KEY``` onde vai ser armazenado a sua API key. Por segurança o repositório não inclui esse arquivo. Caso ainda não possua você pode criar uma conta para [gerar sua API key aqui](https://www.themoviedb.org/)
+Dentro da pasta `./src` deve ser criado o arquivo com nome ```API_KEY.js``` onde vai ser armazenado a sua API key. Por segurança o repositório não inclui esse arquivo. Caso ainda não possua você pode criar uma conta para [gerar sua API key aqui](https://www.themoviedb.org/)
 
 Seu arquivo deve conter a seguinte variavel:
 
@@ -31,4 +31,4 @@ $ npm start
 * [reflux](https://github.com/reflux/refluxjs)
 * [immutability-helper](https://github.com/kolodny/immutability-helper)
 * [axios](https://github.com/axios/axios)
-* [themoviedb API](https://developers.themoviedb.org/3/getting-started/introduction) para realizar consultas com ajax
+* [themoviedb API](https://developers.themoviedb.org/3/getting-started/introduction)
