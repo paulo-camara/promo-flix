@@ -24,6 +24,8 @@ Feito isso o projeto está pronto para ser rodado localmente com o seguinte coma
 $ npm start
 ```
 
+## Para acessar o site utilize o link: http://promo-flix.s3-website-us-east-1.amazonaws.com/list
+
 ## Construido com:
 
 * [react](https://github.com/facebook/react)
