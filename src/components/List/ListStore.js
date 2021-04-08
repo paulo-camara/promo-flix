@@ -34,8 +34,8 @@ export class ListStore extends Reflux.Store {
     );
   }
   _getListGenreSuccess(data, history) {
-    /** Dentro do setState é feita uma verificação para caso o genero esteja selecionado, 
-     * para caso tenha uma chamada por um segundo unmount seja possivel identificar quais 
+    /** Dentro do setState é feita uma verificação para caso o genero esteja selecionado,
+     * para caso tenha uma chamada por um segundo unmount seja possivel identificar quais
      * eram os filtros selecionados  */
 
     this.setState(

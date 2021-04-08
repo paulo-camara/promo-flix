@@ -4,15 +4,15 @@ export const InputFilter = styled.input`
   padding-left: 10px;
   width: 300px;
   height: 30px;
-  background-color: black;
+  background-color: #000000;
   border: 1px solid white;
   margin-right: 20px;
-  color: white;
+  color: #ffffff;
 `;
 
 export const ButtonFilter = styled.button`
   background-color: #cf3836;
-  color: white;
+  color: #ffffff;
   border-radius: 4px;
   height: 37px;
   width: 60px;

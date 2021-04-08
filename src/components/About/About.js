@@ -68,7 +68,7 @@ export const About = ({ history, match }) => {
           <DataMovie>
             <LabelTitle>{movie.title}</LabelTitle>
             <Synopsis>{movie.overview}</Synopsis>
-            <div style={{ color: "white" }}>
+            <div style={{ color: "#ffffff" }}>
               {"Nota: "}
               <Vote
                 vote={movie.vote_average}

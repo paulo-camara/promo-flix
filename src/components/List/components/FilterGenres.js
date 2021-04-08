@@ -12,5 +12,5 @@ export const ContainerFilterGenres = styled.div`
 export const LabelFilterGenres = styled.label`
   margin-left: 5px;
   font-size: 20px;
-  color: ${(props) => (props.isSelected ? "red" : "#a6a6a6")}; ;
+  color: ${(props) => (props.isSelected ? "#cf3837" : "#a6a6a6")}; ;
 `;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Image = styled.img`
   width: 60%;
-  color: white;
+  color: #ffffff;
   border: 1px solid #564a4a;
   margin-bottom: 50px;
 `;
@@ -15,7 +15,7 @@ export const ContainerAboutMovie = styled.div`
 `;
 
 export const Synopsis = styled.div`
-  color: white;
+  color: #ffffff;
   margin-top: 20px;
 `;
 

@@ -4,5 +4,5 @@ export const ListActions = Reflux.createActions([
   "GetListGenre",
   "SetPageNumber",
   "ChangeGenreFilter",
-  'ChangeFilter'
+  "ChangeFilter",
 ]);

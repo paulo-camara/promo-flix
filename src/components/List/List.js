@@ -55,16 +55,43 @@ export class List extends Reflux.Component {
     ListActions.ChangeGenreFilter(genre);
   }
 
+  _filterGenre(movieGenres) {
+    const genresSelecteds = [];
+    let showMovie = false;
+
+    /**obtem todos os ids de generos selecionados */
+    this.state.genres.forEach((genre) => {
+      if (genre.isSelected) {
+        genresSelecteds.push(genre.id);
+      }
+    });
+
+    movieGenres.forEach((id) => {
+      /** valida que pelo menos um dos ids selecionados está presente no array de ids
+       * de genero do filme ou não há nenhum genero selecionado */
+      if (genresSelecteds.includes(id) || genresSelecteds.length == 0) {
+        showMovie = true;
+      }
+    });
+
+    return showMovie;
+  }
+
   //#region get components
   _getFilterGenresComponent() {
     return this.state.genres.map((genre) => {
       return (
         <ContainerFilterGenres key={genre.id}>
-          <LabelFilterGenres isSelected={false}>{genre.name}</LabelFilterGenres>
+          <LabelFilterGenres isSelected={genre.isSelected}>{genre.name}</LabelFilterGenres>
           <input
             type="checkbox"
             checked={genre.isSelected}
             onChange={() => this._changeGenre(genre)}
+            style={{
+              transform: "scale(1.8)",
+              padding: "10px",
+              marginLeft: "10px",
+            }}
           />
         </ContainerFilterGenres>
       );
@@ -72,25 +99,11 @@ export class List extends Reflux.Component {
   }
 
   _getListMoviesComponent() {
-    const allCheckboxMarked = [];
-    this.state.genres.forEach((genre) => {
-      if (genre.isSelected === true) {
-        allCheckboxMarked.push(genre.id);
-      }
-    });
-
-    let showMovie = false;
-    return this.state.popularMovies.results.map((popular) => {
-      popular.genre_ids.forEach((id) => {
-        if (allCheckboxMarked.includes(id) || allCheckboxMarked.length == 0) {
-          showMovie = true;
-        }
-      });
-
-      return (
-        showMovie && (
+    return this.state.popularMovies.results.map(
+      (popular) =>
+        this._filterGenre(popular.genre_ids) && (
           <div key={popular.id}>
-            <LabelDefault style={{ color: "white" }}>
+            <LabelDefault style={{ color: "#ffffff" }}>
               {popular.title}
             </LabelDefault>
             <Link
@@ -109,8 +122,7 @@ export class List extends Reflux.Component {
             </FooterBoxMovie>
           </div>
         )
-      );
-    });
+    );
   }
   //#endregion
 

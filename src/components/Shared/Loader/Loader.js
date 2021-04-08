@@ -17,14 +17,14 @@ const LoaderComponent = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #00000099;
-  color: white;
+  color: #ffffff;
 `;
 
 const Loading = styled.div`
   width: 100px;
   height: 100px;
   border: 3px solid red;
-  border-top-color: white;
+  border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 

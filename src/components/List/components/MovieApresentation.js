@@ -7,7 +7,7 @@ export const ContainerBox = styled.div`
 `;
 
 export const BoxMovie = styled.div`
-  color: white;
+  color: #ffffff;
   width: 250px;
   height: 190px;
   border: 1px solid #564a4a;
